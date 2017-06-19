@@ -38,7 +38,7 @@ public class Client extends Thread{
             e.printStackTrace();
         }
 
-        this.sendMessage("type in the name of your car and press enter.\nrepeat to add more cars.\nsend empty line to register all cars at the race.\n");
+        this.sendMessage("Bitte einen Namen fuer das Auto eingeben.\nMehrmals ausfuehren um weitere Autos anzumelden\nLeerzeiel senden um alle Autos anzumelden\n");
 
         this.start();
     }
