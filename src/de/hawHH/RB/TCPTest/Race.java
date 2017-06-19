@@ -52,7 +52,7 @@ public class Race implements Runnable {
         while(true){
             state = State.ACCEPT;
             registrationStart = LocalTime.now();
-            System.out.println("Starting Race Registration (" + registrationStart + ")");
+            System.out.println("Die Registrierung für das Rennen ist gestartet (" + registrationStart + ")");
             try {
                 sleep(30000);
             } catch (InterruptedException e) {
@@ -62,14 +62,14 @@ public class Race implements Runnable {
             if(this.carMap.size() > 1) {
                 this.startRace();
             }else if(this.carMap.size() == 1) {
-                System.out.println("Not enough contestants. resetting...");
+                System.out.println("Es wurden nicht genug Menschen für das Rennen angemeldet. Neuer Versuch");
                 for(Client c : this.clients){
-                    c.sendMessage("You won. Because no was else competed.");
+                    c.sendMessage("Du hast gewonnen. Du bist der Einzige gewesen");
                     c.closeConnection();
                 }
                 cancelRace();
             }else {
-                System.out.println("Not enough contestants. resetting...");
+                System.out.println("Es wurden nicht genug Menschen für das Rennen angemeldet. Neuer Versuch");
                 cancelRace();
             }
         }
@@ -81,8 +81,8 @@ public class Race implements Runnable {
      */
     private void startRace() {
         state = state.RACERUNNING;
-        this.broadcast("the race started.\n");
-        System.out.println("Starting race. Contestants:");
+        this.broadcast("Das Rennen startet jetzt.\n");
+        System.out.println("Das Rennen ist gestartet. Anmeldungen:");
         for (String s: carMap.keySet()) {
             System.out.println(s);
             this.carRanks.put(s,0);
@@ -99,10 +99,10 @@ public class Race implements Runnable {
                 e.printStackTrace();
             }
 
-            carMap.get(minRoundTimeId).sendMessage("Your car " + minRoundTimeId + " finished as number " + ranking + "!\n");
-            System.out.println("Rank " + ranking + " | " + minRoundTimeId);
+            carMap.get(minRoundTimeId).sendMessage("Dein Auto " + minRoundTimeId + " kam als Nummer " + ranking + " ins Ziel!\n");
+            System.out.println("Rang " + ranking + " | " + minRoundTimeId);
             this.carRanks.put(minRoundTimeId,ranking);
-            this.leaderboard += "Rank " + ranking + " | " + minRoundTimeId + "\n";
+            this.leaderboard += "Rang " + ranking + " | " + minRoundTimeId + "\n";
             this.ranking++;
         }
 
@@ -117,7 +117,7 @@ public class Race implements Runnable {
         state = state.RACEEND;
         System.out.println("---------------------------");
 
-        this.leaderboard += "\npress return to continue\n";
+        this.leaderboard += "\nDruecke Enter um fortzufahren\n";
 
         for(Client c : clients) {
             c.sendMessage(leaderboard);
@@ -147,7 +147,7 @@ public class Race implements Runnable {
         if(state.equals(State.INIT) || state.equals(State.ACCEPT)){
             this.carMap.put(id, client);
             this.clients.add(client);
-            client.sendMessage("succesfully registered: " + id + "\n");
+            client.sendMessage("Sie haben sich erfolgreich registriert: " + id + "\n");
 
             int randomtime = (int) (Math.random() * (30000-10000) + 10000);
             carTimes.put(id, randomtime);
@@ -155,7 +155,7 @@ public class Race implements Runnable {
             LocalTime now = LocalTime.now();
             long diff = registrationStart.until(now, SECONDS);
             long remainingTime = 30 - diff;
-            client.sendMessage(remainingTime + " seconds until race starts\n\n");
+            client.sendMessage(remainingTime + " Sekunden bis zum Start\n\n");
             return true;
         }else{
             return false;
@@ -216,9 +216,9 @@ public class Race implements Runnable {
             if(s.toLowerCase().contains(clientID.toLowerCase())) {
                 int rank = this.carRanks.get(s);
                 if(rank > 0){
-                    info += s + "is rank " + rank + "\n";
+                    info += s + "ist auf Rang " + rank + "\n";
                 } else {
-                    info += "\"" + s + "\" has not finished the race yet.\n";
+                    info += "\"" + s + "\" ist noch nicht im Ziel angekommen.\n";
                 }
             }
         }
