@@ -87,8 +87,8 @@ public class Client extends Thread{
             }
 
             if(state == State.RACEEND) {
-                this.sendMessage("Race ended. Press return to start a new race with the same cars.\n");
-                this.sendMessage("Or type in a new car name to start with new set of cars.\n");
+                this.sendMessage("Das Renne ist beendet. Druecke die Return-Taste um ein Rennen mit den selben Autos erneut durchzufuehren,\n");
+                this.sendMessage("oder gib einen neuen Auto-Namen ein und das Rennen mit einer anderen Konfiguration zu starten.\n");
 
                 String input = "";
                 try {
@@ -119,7 +119,7 @@ public class Client extends Thread{
             this.race.registerCar(this, longName, cars.get(longName));
         }
         this.state = State.REGISTERED;
-        this.sendMessage("Race starts in:\n");
+        this.sendMessage("Das Rennen startet in:\n");
         this.countdown();
         this.state = State.RACERUNNING;
     }
@@ -140,7 +140,7 @@ public class Client extends Thread{
         try {
             socket.close();
         } catch (IOException e) {
-            System.out.println("Error closing socket(" + socket.toString() + ")!");
+            System.out.println("Fehler beim Scließen von Socket(" + socket.toString() + ")!");
         }
     }
 
